@@ -9,11 +9,11 @@ public class FirstController {
 
     @GetMapping
     public String Message() {
-        return "Приложение запущено";
+        return "Приложение запущено!";
     }
     @GetMapping("/info")
-    public String GetInfo() {
-        return "Лебедева Марина, CookingApp, 4.02.2023, Книга рецептов";
+    public String GetPersonalInfo() {
+        return "Лебедева Марина, CookingApp, 4.02.2023 (15:00), Книга рецептов";
     }
 }
 
