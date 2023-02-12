@@ -1,11 +1,12 @@
-package me.lebedamm.budgetapp.service;
+package me.lebedamm.budgetapp.service.Impl;
 
 import me.lebedamm.budgetapp.model.Ingredient;
 import me.lebedamm.budgetapp.model.Recipe;
+import me.lebedamm.budgetapp.service.ValService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ValServiceImpl implements ValService{
+public class ValServiceImpl implements ValService {
 
 
     @Override

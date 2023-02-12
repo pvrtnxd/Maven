@@ -1,7 +1,9 @@
-package me.lebedamm.budgetapp.service;
+package me.lebedamm.budgetapp.service.Impl;
 
 import me.lebedamm.budgetapp.exception.ValException;
 import me.lebedamm.budgetapp.model.Ingredient;
+import me.lebedamm.budgetapp.service.IngredientService;
+import me.lebedamm.budgetapp.service.ValService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -21,7 +23,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient save(Ingredient ingredient) {
-        if (valService.validate(ingredient)) {
+        if (!valService.validate(ingredient)) {
 
             throw new ValException(ingredient.toString());
         }
@@ -32,5 +34,30 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public Optional<Ingredient> getById(Long id) {
         return Optional.ofNullable(ingredientMap.get(id));
+    }
+
+    @Override
+    public Ingredient add(Long id, Ingredient ingredient) {
+        return ingredientMap.put(id, ingredient);
+    }
+
+    @Override
+    public Ingredient redacting(Long id, Ingredient ingredient) {
+        return ingredientMap.replace(id, ingredient);
+    }
+
+    @Override
+    public Ingredient delete(Long id) {
+        return ingredientMap.remove(id);
+    }
+
+    @Override
+    public Ingredient getInfo(Long id, Ingredient ingredient) {
+        return ingredientMap.get(ingredient);
+    }
+
+    @Override
+    public Map<Long, Ingredient> getAll() {
+        return ingredientMap;
     }
 }

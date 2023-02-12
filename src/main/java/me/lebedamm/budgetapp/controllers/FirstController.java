@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class FirstController {
 
     @GetMapping
-    public String Message() {
+    public String message() {
         return "Приложение запущено!";
     }
     @GetMapping("/info")
-    public String GetPersonalInfo() {
+    public String getPersonalInfo() {
         return "Лебедева Марина, CookingApp, 4.02.2023 (15:00), Книга рецептов";
     }
 }
