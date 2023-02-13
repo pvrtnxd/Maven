@@ -38,10 +38,6 @@ public class RecipeServiceImpl implements RecipeService {
         return Optional.ofNullable(recipeMap.get(id));
     }
 
-    @Override
-    public Recipe add(Long id, Recipe recipe) {
-        return recipeMap.put(id, recipe);
-    }
 
     @Override
     public Recipe redacting(Long id, Recipe recipe) {

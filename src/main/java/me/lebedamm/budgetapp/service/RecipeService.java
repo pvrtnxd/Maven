@@ -11,7 +11,6 @@ public interface RecipeService {
 
     Optional<Recipe> getById(Long id);
 
-    Recipe add (Long id, Recipe recipe);
     Recipe redacting (Long id, Recipe recipe);
     Recipe delete (Long id);
     Recipe getInfo (Long id, Recipe recipe);

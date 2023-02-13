@@ -36,10 +36,6 @@ public class IngredientServiceImpl implements IngredientService {
         return Optional.ofNullable(ingredientMap.get(id));
     }
 
-    @Override
-    public Ingredient add(Long id, Ingredient ingredient) {
-        return ingredientMap.put(id, ingredient);
-    }
 
     @Override
     public Ingredient redacting(Long id, Ingredient ingredient) {

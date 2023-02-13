@@ -28,11 +28,8 @@ public class RecipeController {
         return ResponseEntity.of(recipeService.getById(id));
     }
 
-    @PutMapping("/add")
-    public ResponseEntity<Recipe> add (@PathVariable Long id, @RequestBody Recipe recipe) {
-        return ResponseEntity.ok(recipeService.add(id, recipe));
-    }
-    @PutMapping("/redact {id} ")
+
+    @PutMapping("/{id}")
     public ResponseEntity<Recipe> redacting (@PathVariable Long id, @RequestBody Recipe recipe) {
         return ResponseEntity.ok(recipeService.redacting(id, recipe));
     }

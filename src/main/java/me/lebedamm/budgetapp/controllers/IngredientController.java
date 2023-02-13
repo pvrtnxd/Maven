@@ -27,11 +27,7 @@ public class IngredientController {
         return ResponseEntity.of(ingredientService.getById(id));
     }
 
-    @PutMapping("/add")
-    public ResponseEntity<Ingredient> add (@PathVariable Long id, @RequestBody Ingredient ingredient) {
-        return ResponseEntity.ok(ingredientService.add(id, ingredient));
-    }
-    @PutMapping("/redact {id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Ingredient> redacting (@PathVariable Long id, @RequestBody Ingredient ingredient) {
         return ResponseEntity.ok(ingredientService.redacting(id, ingredient));
     }
