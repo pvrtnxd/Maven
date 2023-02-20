@@ -4,6 +4,7 @@ import me.lebedamm.budgetapp.exception.ValException;
 import me.lebedamm.budgetapp.model.Ingredient;
 import me.lebedamm.budgetapp.service.IngredientService;
 import me.lebedamm.budgetapp.service.ValService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient save(Ingredient ingredient) {
+
         if (!valService.validate(ingredient)) {
 
             throw new ValException(ingredient.toString());
