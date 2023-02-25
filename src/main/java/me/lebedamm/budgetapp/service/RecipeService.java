@@ -1,6 +1,5 @@
 package me.lebedamm.budgetapp.service;
 
-import me.lebedamm.budgetapp.model.Ingredient;
 import me.lebedamm.budgetapp.model.Recipe;
 
 import java.util.Map;
@@ -14,5 +13,7 @@ public interface RecipeService {
     Recipe redacting (Long id, Recipe recipe);
     Recipe delete (Long id);
     Recipe getInfo (Long id, Recipe recipe);
-    Map<Long, Recipe> getAll();
+    Map<Integer, Recipe> getAll();
+
+    Map<Integer, Recipe> pagination(Integer page, Integer limit);
 }

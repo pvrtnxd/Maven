@@ -1,25 +1,30 @@
 package me.lebedamm.budgetapp.service.Impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.lebedamm.budgetapp.exception.ValException;
-import me.lebedamm.budgetapp.model.Ingredient;
 import me.lebedamm.budgetapp.model.Recipe;
+import me.lebedamm.budgetapp.service.FilesServices;
 import me.lebedamm.budgetapp.service.RecipeService;
 import me.lebedamm.budgetapp.service.ValService;
 import org.springframework.stereotype.Service;
 
-import java.rmi.server.RemoteRef;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
+    private final FilesServices filesServices;
+
     private static long idCounter = 1;
-    private final Map<Long, Recipe> recipeMap = new HashMap<Long, Recipe>();
+    private static Map<Integer, Recipe> recipeMap = new HashMap<>();
 
     private final ValService valService;
 
-    public RecipeServiceImpl(ValService valService) {
+    public RecipeServiceImpl(FilesServices filesServices, ValService valService) {
+        this.filesServices = filesServices;
         this.valService = valService;
     }
 
@@ -30,7 +35,7 @@ public class RecipeServiceImpl implements RecipeService {
 
             throw new ValException(recipe.toString());
         }
-        return recipeMap.put(idCounter++, recipe);
+        return recipeMap.put((int) idCounter++, recipe);
     }
 
     @Override
@@ -41,7 +46,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe redacting(Long id, Recipe recipe) {
-        return recipeMap.replace(id, recipe);
+        return recipeMap.replace(Math.toIntExact(id), recipe);
     }
 
     @Override
@@ -55,7 +60,34 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Map<Long, Recipe> getAll() {
+    public Map<Integer, Recipe> getAll() {
         return recipeMap;
+    }
+
+    @Override
+    public Map<Integer, Recipe> pagination(Integer page, Integer limit) {
+        return null;
+    }
+
+    private void saveToFile() {
+        try {
+            String json = new ObjectMapper().writeValueAsString(recipeMap);
+            filesServices.saveIngredientsFile(json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readFromFile() {
+        String json = filesServices.readIngredientsFile();
+        try {
+            if (!json.isBlank()) {
+                recipeMap = new ObjectMapper().readValue(json, new TypeReference<Map<Integer, Recipe>>() {
+                });
+                idCounter = recipeMap.size();
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }

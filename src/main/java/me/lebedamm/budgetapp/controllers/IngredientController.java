@@ -33,30 +33,31 @@ public class IngredientController {
 
     @Operation(summary = "Сохранение ингредиента")
     @PostMapping
-    public ResponseEntity<Ingredient> save (@RequestBody Ingredient ingredient) {
+    public ResponseEntity<Ingredient> save(@RequestBody Ingredient ingredient) {
         return ResponseEntity.ok(ingredientService.save(ingredient));
     }
 
     @Operation(summary = "Данные ингредиента по id")
     @GetMapping("/{id}")
-    public ResponseEntity<Ingredient> getById (@PathVariable Long id) {
+    public ResponseEntity<Ingredient> getById(@PathVariable Long id) {
         return ResponseEntity.of(ingredientService.getById(id));
     }
 
     @Operation(summary = "Редактирование ингредиента")
     @PutMapping("/{id}")
-    public ResponseEntity<Ingredient> redacting (@PathVariable Long id, @RequestBody Ingredient ingredient) {
+    public ResponseEntity<Ingredient> redacting(@PathVariable Long id, @RequestBody Ingredient ingredient) {
         return ResponseEntity.ok(ingredientService.redacting(id, ingredient));
     }
 
     @Operation(summary = "Удаление ингредиента")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Ingredient> delete (@PathVariable Long id) {
+    public ResponseEntity<Ingredient> delete(@PathVariable Long id) {
         return ResponseEntity.ok(ingredientService.delete(id));
     }
+
     @Operation(summary = "Получение списка всех ингредиентов")
     @GetMapping
-    public ResponseEntity<Map<Long, Ingredient>> getAll() {
+    public ResponseEntity<Map<Integer, Ingredient>> getAll() {
         return ResponseEntity.ok(ingredientService.getAll());
     }
 }

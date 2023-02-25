@@ -60,7 +60,8 @@ public class RecipeController {
 
     @Operation(summary = "Список всех рецептов")
     @GetMapping
-    public ResponseEntity<Map<Long, Recipe>> getAll() {
-        return ResponseEntity.ok(recipeService.getAll());
+    public ResponseEntity<Map<Integer, Recipe>> getAllRecipes(@RequestParam(required = false, defaultValue = "0") Integer page, @RequestParam(required = false, defaultValue = "0") Integer limit) {
+        Map<Integer, Recipe> recipes = recipeService.pagination(page, limit);
+        return ResponseEntity.ok(recipes);
     }
 }

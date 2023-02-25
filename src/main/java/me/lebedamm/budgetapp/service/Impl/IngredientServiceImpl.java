@@ -1,10 +1,15 @@
 package me.lebedamm.budgetapp.service.Impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import me.lebedamm.budgetapp.exception.ValException;
 import me.lebedamm.budgetapp.model.Ingredient;
+import me.lebedamm.budgetapp.model.Recipe;
+import me.lebedamm.budgetapp.service.FilesServices;
 import me.lebedamm.budgetapp.service.IngredientService;
 import me.lebedamm.budgetapp.service.ValService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -13,12 +18,16 @@ import java.util.Optional;
 @Service
 public class IngredientServiceImpl implements IngredientService {
 
+    private final FilesServices filesServices;
+
     private static long idCounter = 1;
-    private final Map<Long, Ingredient> ingredientMap = new HashMap<>();
+    private Map<Integer, Ingredient> ingredientMap = new HashMap<>();
 
     private final ValService valService;
 
-    public IngredientServiceImpl(ValService valService) {
+
+    public IngredientServiceImpl(FilesServices filesServices, ValService valService) {
+        this.filesServices = filesServices;
         this.valService = valService;
     }
 
@@ -29,7 +38,7 @@ public class IngredientServiceImpl implements IngredientService {
 
             throw new ValException(ingredient.toString());
         }
-        return ingredientMap.put(idCounter++, ingredient);
+        return ingredientMap.put((int) idCounter++, ingredient);
 
     }
 
@@ -41,7 +50,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient redacting(Long id, Ingredient ingredient) {
-        return ingredientMap.replace(id, ingredient);
+        return ingredientMap.replace(Math.toIntExact(id), ingredient);
     }
 
     @Override
@@ -55,7 +64,34 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Map<Long, Ingredient> getAll() {
+    public Map<Integer, Ingredient> getAll() {
         return ingredientMap;
+    }
+
+    @PostConstruct
+    private void init() {
+        readFromFile();
+    }
+
+    private void saveToFile() {
+        try {
+            String json = new ObjectMapper().writeValueAsString(ingredientMap);
+            filesServices.saveIngredientsFile(json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readFromFile() {
+        String json = filesServices.readIngredientsFile();
+        try {
+            if (!json.isBlank()) {
+                ingredientMap = new ObjectMapper().readValue(json, new TypeReference<Map<Integer, Ingredient>>() {
+                });
+                idCounter = ingredientMap.size();
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }
