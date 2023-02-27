@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class FirstController {
 
     @GetMapping
-    public String HelloWeb() {
-        return "Приложение запущено";
+    public String message() {
+        return "Приложение запущено!";
     }
     @GetMapping("/info")
-    public String GetInfo() {
-        return "Лебедева Марина, CookingApp, 4.02.2023, Книга рецептов";
+    public String getPersonalInfo() {
+        return "Лебедева Марина, CookingApp, 4.02.2023 (15:00), Книга рецептов";
     }
 }
 
