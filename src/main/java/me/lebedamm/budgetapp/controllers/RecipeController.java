@@ -48,7 +48,7 @@ public class RecipeController {
 
     @Operation(summary = "Редактирование рецепта")
     @PutMapping("/{id}")
-    public ResponseEntity<Recipe> redacting (@PathVariable Long id, @RequestBody Recipe recipe) {
+    public ResponseEntity<Recipe> redacting (@PathVariable int id, @RequestBody Recipe recipe) {
         return ResponseEntity.ok(recipeService.redacting(id, recipe));
     }
 

@@ -45,7 +45,7 @@ public class IngredientController {
 
     @Operation(summary = "Редактирование ингредиента")
     @PutMapping("/{id}")
-    public ResponseEntity<Ingredient> redacting(@PathVariable Long id, @RequestBody Ingredient ingredient) {
+    public ResponseEntity<Ingredient> redacting(@PathVariable int id, @RequestBody Ingredient ingredient) {
         return ResponseEntity.ok(ingredientService.redacting(id, ingredient));
     }
 

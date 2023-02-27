@@ -2,9 +2,13 @@ package me.lebedamm.budgetapp.service.Impl;
 
 import jakarta.annotation.PostConstruct;
 import me.lebedamm.budgetapp.service.FilesServices;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -69,6 +73,45 @@ public class FilesServicesImpl implements FilesServices {
             return false;
         }
     }
+
+    @Override
+    public File getDataIngredientFile() {
+        return new File(dataFilesPath + "/" + ingredientDataFileName);
+    }
+    @Override
+    public File getDataRecipeFile() {
+        return new File(dataFilesPath + "/" + recipeDataFileName);
+    }
+
+    @Override
+    public void importDataRecipeFile(MultipartFile file) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(getDataRecipeFileInfo())) {
+            IOUtils.copy(file.getInputStream(), fos);
+        } catch (IOException e) {
+            throw new IOException();
+        }
+    }
+
+
+    @Override
+    public void importDataIngredientFile(MultipartFile file) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(getDataIngredientFileInfo())) {
+            IOUtils.copy(file.getInputStream(), fos);
+        } catch (IOException e) {
+            throw new IOException();
+        }
+    }
+
+    @Override
+    public File getDataRecipeFileInfo(){
+        return new File(dataFilesPath + "/" + recipeDataFileName);
+    }
+
+    @Override
+    public File getDataIngredientFileInfo(){
+        return new File(dataFilesPath + "/" + ingredientDataFileName);
+    }
+
     @PostConstruct
     private void init() {
         try {

@@ -3,6 +3,7 @@ package me.lebedamm.budgetapp.service.Impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import me.lebedamm.budgetapp.exception.ValException;
 import me.lebedamm.budgetapp.model.Recipe;
 import me.lebedamm.budgetapp.service.FilesServices;
@@ -18,7 +19,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     private final FilesServices filesServices;
 
-    private static long idCounter = 1;
+    private static int idCounter = 1;
     private static Map<Integer, Recipe> recipeMap = new HashMap<>();
 
     private final ValService valService;
@@ -35,7 +36,7 @@ public class RecipeServiceImpl implements RecipeService {
 
             throw new ValException(recipe.toString());
         }
-        return recipeMap.put((int) idCounter++, recipe);
+        return recipeMap.put( idCounter++, recipe);
     }
 
     @Override
@@ -45,8 +46,13 @@ public class RecipeServiceImpl implements RecipeService {
 
 
     @Override
-    public Recipe redacting(Long id, Recipe recipe) {
-        return recipeMap.replace(Math.toIntExact(id), recipe);
+    public Recipe redacting(int id, Recipe recipe) {
+        if (recipeMap.containsKey(id)) {
+            recipeMap.put(id, recipe);
+            saveToFile();
+            return recipe;
+        }
+        return null;
     }
 
     @Override
@@ -67,6 +73,11 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Map<Integer, Recipe> pagination(Integer page, Integer limit) {
         return null;
+    }
+
+    @PostConstruct
+    private void init() {
+        readFromFile();
     }
 
     private void saveToFile() {

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import me.lebedamm.budgetapp.exception.ValException;
 import me.lebedamm.budgetapp.model.Ingredient;
-import me.lebedamm.budgetapp.model.Recipe;
 import me.lebedamm.budgetapp.service.FilesServices;
 import me.lebedamm.budgetapp.service.IngredientService;
 import me.lebedamm.budgetapp.service.ValService;
@@ -20,7 +19,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     private final FilesServices filesServices;
 
-    private static long idCounter = 1;
+    private static int idCounter = 1;
     private Map<Integer, Ingredient> ingredientMap = new HashMap<>();
 
     private final ValService valService;
@@ -38,7 +37,7 @@ public class IngredientServiceImpl implements IngredientService {
 
             throw new ValException(ingredient.toString());
         }
-        return ingredientMap.put((int) idCounter++, ingredient);
+        return ingredientMap.put( idCounter++, ingredient);
 
     }
 
@@ -49,13 +48,24 @@ public class IngredientServiceImpl implements IngredientService {
 
 
     @Override
-    public Ingredient redacting(Long id, Ingredient ingredient) {
-        return ingredientMap.replace(Math.toIntExact(id), ingredient);
+    public Ingredient redacting(int id, Ingredient ingredient) {
+        if (ingredientMap.containsKey(id)) {
+            ingredientMap.put(id, ingredient);
+            saveToFile();
+            return ingredient;
+        }
+        return null;
     }
 
     @Override
     public Ingredient delete(Long id) {
-        return ingredientMap.remove(id);
+        if (ingredientMap.containsKey(id)) {
+            Ingredient removedIngredient = ingredientMap.remove(id);
+            saveToFile();
+            return removedIngredient;
+        } else {
+            return null;
+        }
     }
 
     @Override

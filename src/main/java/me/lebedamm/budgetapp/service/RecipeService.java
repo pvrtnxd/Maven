@@ -10,7 +10,8 @@ public interface RecipeService {
 
     Optional<Recipe> getById(Long id);
 
-    Recipe redacting (Long id, Recipe recipe);
+    Recipe redacting(int id, Recipe recipe);
+
     Recipe delete (Long id);
     Recipe getInfo (Long id, Recipe recipe);
     Map<Integer, Recipe> getAll();

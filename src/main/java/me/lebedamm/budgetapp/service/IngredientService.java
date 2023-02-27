@@ -10,7 +10,7 @@ public interface IngredientService {
 
     Optional<Ingredient> getById(Long id);
 
-    Ingredient redacting(Long id, Ingredient ingredient);
+    Ingredient redacting(int id, Ingredient ingredient);
 
     Ingredient delete(Long id);
 
